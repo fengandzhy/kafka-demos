@@ -17,6 +17,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>kafka-begin</module>
+        <module>kafka-producer</module>
     </modules>
 
     <properties>
