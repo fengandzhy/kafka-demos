@@ -91,4 +91,24 @@ public class ProducerTest {
         }
         producer.close();
     }
+
+    @Test
+    public void sendMessageWithCallBackTest(){
+        Properties properties = getProperties();
+        Producer<String,String> producer = new KafkaProducer<>(properties);
+        for(int i=0;i<3 ;i++){
+            producer.send(new ProducerRecord<>("kafka-sp-topic-1", "frank-key" + i, "frank-value" + i), new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception exception) {
+                    if(exception == null){
+                        System.out.println("发送状态："+metadata.toString());
+                    }else{
+                        System.out.println(exception.getMessage());
+                    }
+                }
+            });
+            
+        }
+        producer.close();
+    }
 }
