@@ -1,7 +1,6 @@
 package org.frank.kafka.admin.test;
 
 import org.apache.kafka.clients.admin.*;
-import org.apache.kafka.common.internals.Topic;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
