@@ -1,5 +1,12 @@
 package org.frank.kafka.consumer;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class ConsumerTest {
@@ -8,7 +15,7 @@ public class ConsumerTest {
         Properties props = new Properties();
 
         //broker地址
-        props.put("bootstrap.servers", "112.74.55.160:9092");
+        props.put("bootstrap.servers", "47.242.251.45:9092");
 
         //消费者分组ID，分组内的消费者只能消费该消息一次，不同分组内的消费者可以重复消费该消息
         props.put("group.id", "xdclass-g1");
@@ -24,5 +31,22 @@ public class ConsumerTest {
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
         return props;
+    }
+    
+    @Test
+    public void simpleConsumerTest(){
+        Properties properties = getProperties();
+        KafkaConsumer<String,String> kafkaConsumer = new KafkaConsumer<>(properties);
+        //订阅主题
+        kafkaConsumer.subscribe(Arrays.asList("kafka-sp-topic-1"));
+        
+        
+        while(true){
+            //领取时间，阻塞超时时间
+            ConsumerRecords<String,String> records = kafkaConsumer.poll(Duration.ofMillis(100));
+            for(ConsumerRecord record : records){
+                System.err.printf("topic=%s, offset=%d,key=%s,value=%s %n",record.topic(),record.offset(),record.key(),record.value());
+            } 
+        }        
     }
 }
